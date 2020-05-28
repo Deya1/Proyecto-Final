@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="ProyectoFinal.css">
+</head>
+<body>
+	<div id="root"></div>
+	<script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
+	<script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+	<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>	
+	<script type="text/babel">
+		const rootElement=document.getElementById('root'); 
+		
+		function HexBot(){
+				const [status, setStatus]=React.useState('idle');
+				const [color, setColor]=React.useState(null);
+				const [error, setError]=React.useState(null);
+
+				React.useEffect(()=>{
+					getColor();
+				},[]);
+
+				function getColor(){
+					setStatus('loading');
+					fetch('http://api.noopschallenge.com/hexbot').then(
+						(data)=>data.json()
+						).then(
+							(data)=>{
+								console.log(data.colors[0].value);
+								setStatus('resolved');
+								setColor(data.colors[0].value);
+							}
+						).catch(
+						(errorData)=>{
+							setStatus('rejected');
+						}
+					)
+				}
+				
+			return(
+				<>
+				<div className="PaletaColores">
+					<button
+						type="button"
+						className="btn"
+						onClick={getColor}
+					>
+					Nuevos Colores
+					</button>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+					<div className="cuadros" style={{backgroundColor:color}}>
+					</div>
+				</div>
+				{status==='loading'&&(
+					<p>Loading...</p>
+					)}
+				{status==='rejected'&&(
+					<p>Error{error}</p>
+					)}
+				</>
+			)
+		}
+
+
+		ReactDOM.render(<HexBot/>, rootElement);
+	</script>
+</body>
+</html>
